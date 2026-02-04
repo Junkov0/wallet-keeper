@@ -1,3 +1,8 @@
 spring:
-  application:
-    name: wallet-keeper
+  sql:
+    init:
+      mode: always                           # 매번 실행 (로컬 환경 권장)
+  jpa:
+    hibernate:
+      ddl-auto: none                          # schema.sql을 직접 관리하므로 none 혹은 validate 권장
+    defer-datasource-initialization: true     # 하이버네이트 초기화 후 SQL 실행
