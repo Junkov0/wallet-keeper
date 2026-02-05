@@ -1,8 +1,21 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/wallet_keeper
+    username: wallet_user
+    password: wallet12345
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show_sql: true  # hibernate.show_sql 대신 스프링 표준 설정을 권장
+    hibernate:
+      ddl-auto: none # schema.sql을 통해 제어하므로 none 설정
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true # SQL을 콘솔에서 더 예쁘게 볼 수 있다.
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+
   sql:
     init:
       mode: always                           # 매번 실행 (로컬 환경 권장)
-  jpa:
-    hibernate:
-      ddl-auto: none                          # schema.sql을 직접 관리하므로 none 혹은 validate 권장
-    defer-datasource-initialization: true     # 하이버네이트 초기화 후 SQL 실행
