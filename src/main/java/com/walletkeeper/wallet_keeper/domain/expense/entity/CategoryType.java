@@ -1,4 +1,4 @@
-package com.walletkeeper.wallet_keeper.entity;
+package com.walletkeeper.wallet_keeper.domain.expense.entity;
 
 import lombok.Getter;
 

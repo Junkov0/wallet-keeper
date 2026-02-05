@@ -1,5 +1,6 @@
-package com.walletkeeper.wallet_keeper.entity;
+package com.walletkeeper.wallet_keeper.domain.receipt.entity;
 
+import com.walletkeeper.wallet_keeper.domain.expense.entity.Expense;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -16,47 +17,42 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "weeklyreports")
+@Table(name = "receipts")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class WeeklyReport {
+public class Receipt {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  // 영수증 지출 내역 없이는 단독으로 존재 X
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  @JoinColumn(name = "expense_id", nullable = false)
+  private Expense expense;
 
-  @Column(name = "report_content", columnDefinition = "TEXT")
-  private String reportContent;
+  @Column(name = "s3_key", length = 255, nullable = false)
+  private String s3Key;
 
-  @Column(name = "start_date")
-  private LocalDateTime startDate;
+  @Column(name = "original_filename", length = 255, nullable = false)
+  private String originalFileName;
 
-  @Column(name = "end_date")
-  private LocalDateTime endDate;
+  @Column(name = "file_size", nullable = false)
+  private Long fileSize;
 
   @CreatedDate
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
-
   @Builder
-  public WeeklyReport(User user, String reportContent, LocalDateTime startDate, LocalDateTime endDate) {
-    this.user = user;
-    this.reportContent = reportContent;
-    this.startDate = startDate;
-    this.endDate = endDate;
+  public Receipt(Expense expense, String s3Key, String originalFileName, Long fileSize) {
+    this.expense = expense;
+    this.s3Key = s3Key;
+    this.originalFileName = originalFileName;
+    this.fileSize = fileSize;
   }
-
 }

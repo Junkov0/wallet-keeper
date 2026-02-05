@@ -1,6 +1,6 @@
-package com.walletkeeper.wallet_keeper.repository;
+package com.walletkeeper.wallet_keeper.domain.user.repository;
 
-import com.walletkeeper.wallet_keeper.entity.User;
+import com.walletkeeper.wallet_keeper.domain.user.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
