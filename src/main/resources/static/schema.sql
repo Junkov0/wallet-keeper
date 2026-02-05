@@ -15,7 +15,7 @@ CREATE TYPE source_provider AS ENUM ('MANUAL', 'RECEIPT_OCR', 'CARD_OCR');
 CREATE TABLE "users" (
                          "id"            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                          "email"         VARCHAR(100) NOT NULL UNIQUE,
-                         "password"      VARCHAR(100) NOT NULL,
+                         "password"      VARCHAR(255) NOT NULL,
                          "nickname"      VARCHAR(50)  NOT NULL,
                          "target_budget" INTEGER      NULL,
                          "created_at"    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE "receipts" (
                             "expense_id"        BIGINT       NOT NULL,
                             "s3_key"            VARCHAR(255) NOT NULL,
                             "original_filename" VARCHAR(255) NOT NULL,
-                            "file_size"         BIGINT       NULL,
+                            "file_size"         BIGINT       NOT NULL,
                             "created_at"        TIMESTAMP    DEFAULT CURRENT_TIMESTAMP NOT NULL, -- 생성 시간만 추가 (수정 불가 논리)
                             CONSTRAINT "fk_expenses_to_receipts" FOREIGN KEY ("expense_id") REFERENCES "expenses" ("id")
 );
@@ -55,8 +55,8 @@ CREATE TABLE "weeklyreports" (
                                  "id"             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                                  "user_id"        BIGINT    NOT NULL,
                                  "report_content" TEXT      NULL,
-                                 "start_date"     TIMESTAMP NULL,
-                                 "end_date"       TIMESTAMP NULL,
+                                 "start_date"     TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+                                 "end_date"       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
                                  "created_at"     TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- 생성 시간 추가
                                  "updated_at"     TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- 수정 시간 추가
                                  CONSTRAINT "fk_users_to_weeklyreports" FOREIGN KEY ("user_id") REFERENCES "users" ("id")

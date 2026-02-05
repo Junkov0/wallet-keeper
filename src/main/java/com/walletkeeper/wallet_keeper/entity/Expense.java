@@ -19,16 +19,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/*
+  @SQLRestriction("deleted_at IS NULL") -> 매번 삭제되지 않은 데이터 가져와라 할 때
+  SELECT * FROM expenses WHERE user_id = 1 AND deleted_at IS NULL; 이런식으로 매번 쿼리에 IS NULL 붙이는게 번거로운데
+  해당 어노테이션을 붙이면 JPA가 조회할 때 자동으로 삭제된 데이터를 제외해준다. -> 삭제 되지 않은 것만 조회해준다.
+ */
 @Entity
 @Table(name = "expenses")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@SQLRestriction("deleted_at IS NULL")
 public class Expense {
 
   @Id
@@ -36,7 +43,7 @@ public class Expense {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @Column(nullable = false, precision = 19, scale = 2)
